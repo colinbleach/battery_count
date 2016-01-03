@@ -7,27 +7,33 @@ class BatteryControllerTest extends WebTestCase
 {
     public function testBattery()
     {
-        $client1 = static::createClient();
-        $client2 = static::createClient();
-        $client3 = static::createClient();
-        $client4 = static::createClient();
+        $client = static::createClient();
 
-        $crawler1 = $client1->request('POST', '/batterypack/new');
-        $crawler2 = $client2->request('POST', '/batterypack/new');
-        $crawler3 = $client3->request('POST', '/batterypack/new');
-        
+        $crawler = $client->request('POST', '/batterypack/new');
+
         $data1 = array('type' => 'aa', 'count' => 4, 'name' => 'test');
-        $data1 = array('type' => 'aaa', 'count' => 3, 'name' => 'test');
-        $data1 = array('type' => 'aa', 'count' => 1, 'name' => 'test');
+        $data2 = array('type' => 'aaa', 'count' => 3, 'name' => 'test');
+        $data3 = array('type' => 'aa', 'count' => 1, 'name' => 'test');
         
-        $crawler4 = $client4->request('GET', '/');
-        $this->assertEquals(200, $client4->getResponse()->getStatusCode());
+        $form = $crawler->selectButton('submit')->form();
         
-        $this->assertEquals(200, $client4->getResponse()->getStatusCode());
-        $this->assertContains(5, $crawler4->filter('#aa td')->text());
+        $form['type'] = 'aa';
+        $form['count'] = 4;
+        $form['name'] = 'test';
         
-        $this->assertEquals(200, $client4->getResponse()->getStatusCode());
-        $this->assertContains(3, $crawler4->filter('#aaa td')->text());
-
+        $crawler = $client->submit($form);
+        
+        $form['type'] = 'aaa';
+        $form['count'] = 3;
+        $form['name'] = 'test';
+        
+        $crawler = $client->submit($form);
+        
+        $form['type'] = 'aa';
+        $form['count'] = 1;
+        $form['name'] = 'test';
+        
+        $crawler = $client->submit($form);
     }
+    
 }

@@ -7,26 +7,83 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Entity\BatteryCount;
+use AppBundle\Entity\AddBattery;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class BatteryController extends Controller
 {
     /**
      * @Route("/batterypack/new")
-     * @Method({"GET"})
+     *
      */
-    public function newBattery()
+    public function newBattery(Request $request)
     {   
-        return $this->render('battery.html.twig', [
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ]);
+        $addBattery = new AddBattery();
+        
+        $form = $this->createFormBuilder($addBattery)
+            ->add('type',TextType::class)
+            ->add('count',IntegerType::class,array('attr' => array('min' => 1)))
+            ->add('name',TextType::class,array('required' => false))
+            ->add('save', SubmitType::class, array('label' => 'Add Battery'))
+            ->getForm();
+       
+       $form->handleRequest($request);
+       
+       if ($form->isSubmitted() && !empty($addBattery->getType() && $addBattery->getCount())) {
+            $em = $this->getDoctrine()->getManager('default');
+
+            $addBattery->setName(
+                $this->SanitiseString(
+                    $addBattery->getName()
+                    )
+                );
+            $addBattery->setCount(
+                $this->SanitiseString(
+                    $addBattery->getCount()
+                    )
+                );
+            $addBattery->setType(
+                $this->SanitiseString(
+                    $addBattery->getType()
+                    )
+                );
+
+            $addBattery->setName(
+                empty($addBattery->getName())? '' : $addBattery->getName()
+            );
+            
+            $addBattery->setType(
+                preg_replace('/\s+/', '', $addBattery->getType())
+                );
+                    
+            $battery_count = new BatteryCount();
+        
+            $battery_count->setType($addBattery->getType());
+            $battery_count->setCount($addBattery->getCount());
+            $battery_count->setName($addBattery->getName());
+            
+            $em->persist($battery_count);
+            $em->flush();
+        }
+        
+        return $this->render('AppBundle::battery.html.twig', 
+            array(
+                'form' => $form->createView(),
+            )
+        );
     }
     
     /**
-     * @Route("/batterypack/new")
+     * @Route("/battery/add")
      * @Method({"POST"})
      */
     public function addBattery(Request $request)
     {
+        $em = $this->getDoctrine()->getManager('default');
+        
         $type = $request->get('type');
         $count = (int)$request->get('count');
         $name = $request->get('name');
@@ -39,24 +96,16 @@ class BatteryController extends Controller
         
         $type = preg_replace('/\s+/', '', $type);
         
-        $dbconn = pg_connect("host=localhost port=5432 dbname=battery_count user=battery_user password=password");
-
-        if (strcasecmp($type,'aa') == 0)
-        {
-            pg_query($dbconn,'insert into battery_count(type,battery_count,name) values(\'aa\','.$count.',\''.$name.'\');');
-        }
-        elseif (strcasecmp($type,'aaa') == 0)
-        {
-            pg_query($dbconn,'insert into battery_count(type,battery_count,name) values(\'aaa\','.$count.',\''.$name.'\');');
-        }
-        else
-        {
-            pg_query($dbconn,'insert into battery_count(type,battery_count,name) values(\'other\','.$count.',\''.$name.'\');');    
-        }
+        $battery_count = new BatteryCount();
         
-        return $this->render('battery.html.twig', [
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ]);
+        $battery_count->setType($type);
+        $battery_count->setCount($count);
+        $battery_count->setName($name);
+
+        $em->persist($battery_count);
+        $em->flush();
+
+        return $this->render('AppBundle::battery.html.twig');
         
     }
     

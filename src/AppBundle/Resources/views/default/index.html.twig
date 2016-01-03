@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::base.html.twig' %}
 
 {% block body %}
 <div><h1>Welcome to Recycle Batteries application</h1></div>
@@ -10,18 +10,12 @@
         <td>Battery Type</td>
         <td>Total Count</>
     </tr>
+    {% for item in items %}
     <tr>
-        <td>AA</td>
-        <td id="aa">{{aa_count}}</>
+        <td>{{item.type}}</td>
+        <td id="{{item.type}}">{{item[1]}}</>
     </tr>
-    <tr>
-        <td>AAA</td>
-        <td id="aaa">{{aaa_count}}</>
-    </tr>
-    <tr>
-        <td>Other</td>
-        <td id="other">{{other_count}}</>
-    </tr>
+    {% endfor %}
 </table>
 </div>
 {% endblock %}

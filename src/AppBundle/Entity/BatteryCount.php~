@@ -1,0 +1,48 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * BatteryCount
+ *
+ * @ORM\Table(name="battery_count")
+ * @ORM\Entity
+ */
+class BatteryCount
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="text", nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="count", type="integer", nullable=true)
+     */
+    private $count;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="text", nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="battery_countid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="battery_count_battery_countid_seq", allocationSize=1, initialValue=1)
+     */
+    private $batteryCountid;
+
+
+}
+
