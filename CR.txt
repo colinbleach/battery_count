@@ -1,0 +1,11 @@
+Hi Colin,
+
+Please conside following comments. You may fix it either now or after discussion of this task.
+
+Regarding functionality:
+ - table should be able to show any type of batteries, not only AA and AAA. You are expected to select all batteries with "group by type".
+ - test isn't finished, is it? It's very important part of task. Also 1 client in test is enough. Check here "http://symfony.com/doc/current/book/testing.html" part Functional testing.
+ - use Doctrine. It's able to work with Postgre as well, if you wish :)
+ - use Symfony Forms to work with form stuff. http://symfony.com/doc/current/book/forms.html . You can also generate the form automatically.
+ - templates related to Bundle should be located in it. In your case it is src/AppBundle/Resources/views/[ControllerName]/[TemplateName]. You may also use annotations and template will be picked up automatically. http://symfony.com/doc/current/book/controller.html
+ - extend templates from ::base.html.twig
