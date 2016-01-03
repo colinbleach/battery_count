@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div><h1>Welcome to Recycle Batteries application</h1></div>
+<div><span>Click <a href="/batterypack/new">here</a> to add new batteries</span></div>
+<div><span>Statistics:</span></div>
+<div>
+<table border="1">
+    <tr>
+        <td>Battery Type</td>
+        <td>Total Count</>
+    </tr>
+    <tr>
+        <td>AA</td>
+        <td id="aa">{{aa_count}}</>
+    </tr>
+    <tr>
+        <td>AAA</td>
+        <td id="aaa">{{aaa_count}}</>
+    </tr>
+    <tr>
+        <td>Other</td>
+        <td id="other">{{other_count}}</>
+    </tr>
+</table>
+</div>
+{% endblock %}
