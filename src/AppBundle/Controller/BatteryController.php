@@ -19,13 +19,7 @@ class BatteryController extends Controller
     public function newBattery(Request $request)
     {
         $form = $this->createForm(BatteryCountType::class);
-//        $form = $this->createFormBuilder(new BatteryCount())
-//            ->add('type',TextType::class)
-//            ->add('count',IntegerType::class,array('attr' => array('min' => 1)))
-//            ->add('name',TextType::class,array('required' => false))
-//            ->add('save', SubmitType::class, array('label' => 'Add Battery'))
-//            ->getForm();
-//
+
         $form->handleRequest($request);
 
        if ($form->isValid()) {
