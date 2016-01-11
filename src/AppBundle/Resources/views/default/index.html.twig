@@ -8,12 +8,12 @@
 <table border="1">
     <tr>
         <td>Battery Type</td>
-        <td>Total Count</>
+        <td>Total Count</td>
     </tr>
     {% for item in items %}
     <tr>
         <td>{{item.type}}</td>
-        <td id="{{item.type}}">{{item[1]}}</>
+        <td id="{{item.type}}">{{item[1]}}</td>
     </tr>
     {% endfor %}
 </table>

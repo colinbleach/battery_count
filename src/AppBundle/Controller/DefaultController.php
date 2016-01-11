@@ -14,16 +14,9 @@ class DefaultController extends Controller
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
-    {   
-        $em = $this->getDoctrine()->getManager('default');
-        
-        $battery = new BatteryCount();
-        //$dbconn = pg_connect("host=localhost port=5432 dbname=battery_count user=battery_user password=password");
-        
+    {
         $em = $this->getDoctrine()->getManager();
-        
-        $battery_count_output = new BatteryCountOutput();
-        
+
         $query = $em->createQuery(
             'SELECT p.type,SUM(p.count) as count
             AppBundle:BatteryCount p

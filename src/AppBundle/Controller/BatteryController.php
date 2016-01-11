@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Battery;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class BatteryController extends Controller
      */
     public function newBattery(Request $request)
     {   
-        $addBattery = new AddBattery();
+        $addBattery = new BatteryCount();
         
         $form = $this->createFormBuilder($addBattery)
             ->add('type',TextType::class)
@@ -32,7 +33,7 @@ class BatteryController extends Controller
        
        $form->handleRequest($request);
        
-       if ($form->isSubmitted() && !empty($addBattery->getType() && $addBattery->getCount())) {
+       if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager('default');
 
             $addBattery->setName(
@@ -75,39 +76,7 @@ class BatteryController extends Controller
             )
         );
     }
-    
-    /**
-     * @Route("/battery/add")
-     * @Method({"POST"})
-     */
-    public function addBattery(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager('default');
-        
-        $type = $request->get('type');
-        $count = (int)$request->get('count');
-        $name = $request->get('name');
-        
-        $name = $this->SanitiseString($name);
-        $count = $this->SanitiseString($count);
-        $type = $this->SanitiseString($type);
 
-        $name = empty($name)? '' : $name;
-        
-        $type = preg_replace('/\s+/', '', $type);
-        
-        $battery_count = new BatteryCount();
-        
-        $battery_count->setType($type);
-        $battery_count->setCount($count);
-        $battery_count->setName($name);
-
-        $em->persist($battery_count);
-        $em->flush();
-
-        return $this->render('AppBundle::battery.html.twig');
-        
-    }
     
     private static function SanitiseString($value)
     {
