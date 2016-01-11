@@ -28,7 +28,7 @@ class BatteryControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
         $aa = $crawler->filter('#aa')->text();
         $aaa = $crawler->filter('#aaa')->text();
-        
+
         $this->assertEquals("5",$aa);
         $this->assertCount("3",$aaa);
 

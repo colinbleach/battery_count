@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BatteryCount
  *
  * @ORM\Table(name="battery_count")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BatteryCountRepository")
  */
 class BatteryCount
 {

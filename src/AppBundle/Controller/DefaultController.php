@@ -5,8 +5,6 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\BatteryCount;
-use AppBundle\Entity\BatteryCountOutput;
 
 class DefaultController extends Controller
 {
@@ -15,19 +13,10 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:BatteryCount');
 
-        $query = $em->createQuery(
-            'SELECT p.type,SUM(p.count) as count
-            AppBundle:BatteryCount p
-            GROUP BY p.type'
-        );
-        
-        $battery_count_output = $query->getResult();
+        $battery_count_output = $repository->getBatteries();
 
-        $em->flush();
-        
-        //return $this->render('default/index.html.twig',
         return $this->render('AppBundle::default/index.html.twig',
             array(
                 'items' => $battery_count_output
